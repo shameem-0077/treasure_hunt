@@ -14,8 +14,12 @@ class GetUserQuestionSerializer(serializers.ModelSerializer):
         )
     
     def get_is_last_question(self, obj):
-        last_question = Question.objects.filter(game=obj.game).distinct().order_by('-order').last()
-        
+        last_question = Question.objects.filter(game=obj.game).distinct().order_by('-order').first()
+
         if last_question == obj:
             return True
         return False
+
+
+class ValidateUserQuestionAnswer(serializers.Serializer):
+    answer = serializers.CharField()

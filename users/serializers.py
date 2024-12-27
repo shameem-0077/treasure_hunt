@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from users.models import Player
@@ -7,6 +9,7 @@ from core.functions import get_tokens_for_user
 
 
 class CreateAccountSerializer(serializers.Serializer):
+    team_name = serializers.CharField()
     email = serializers.CharField()
     password = serializers.CharField()
     game_id = serializers.IntegerField(required=False)
@@ -21,11 +24,13 @@ class CreateAccountSerializer(serializers.Serializer):
 
 
     def create(self, validated_data):
+        team_name = validated_data("team_name")
         email = validated_data.get("email")
         password = validated_data.get("password")
         game_id = validated_data.get("game_id", None)
 
         user = User.objects.create_user(
+            first_name=team_name,
             username=email,
             email=email,
             password=password
@@ -36,12 +41,17 @@ class CreateAccountSerializer(serializers.Serializer):
         else:
             game = TreasureHuntGame.objects.filter(is_active=True).first()
 
+
         player = Player.objects.create(
             user=user,
             game=game,
         )
 
-        data = get_tokens_for_user(user=user)
+        data = {
+            "team_name": user.first_name,
+            "team_unique_id": player.unique_id,
+            "tokens": get_tokens_for_user(user=user)
+        }
 
         return data
 
