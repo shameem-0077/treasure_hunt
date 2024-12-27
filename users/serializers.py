@@ -1,5 +1,6 @@
 import uuid
 
+from django.utils.text import slugify
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from users.models import Player
@@ -16,19 +17,29 @@ class CreateAccountSerializer(serializers.Serializer):
 
     def validate(self, data):
         email = data.get("email")
+        game_id = data.get("game_id", None)
         
         if User.objects.filter(username=email).exists():
             raise serializers.ValidationError({"account": "Already exists"})
+        
+        if game_id:
+            game = TreasureHuntGame.objects.get(pk=game_id, is_active=True)
+        else:
+            game = TreasureHuntGame.objects.filter(is_active=True).first()
+        
+        if not game:
+            raise serializers.ValidationError({"game": "No game not found to add"})
         
         return data
 
 
     def create(self, validated_data):
-        team_name = validated_data("team_name")
+        team_name = validated_data.get("team_name")
         email = validated_data.get("email")
         password = validated_data.get("password")
         game_id = validated_data.get("game_id", None)
 
+        team_name = slugify(team_name)
         user = User.objects.create_user(
             first_name=team_name,
             username=email,
@@ -40,7 +51,6 @@ class CreateAccountSerializer(serializers.Serializer):
             game = TreasureHuntGame.objects.get(pk=game_id, is_active=True)
         else:
             game = TreasureHuntGame.objects.filter(is_active=True).first()
-
 
         player = Player.objects.create(
             user=user,
