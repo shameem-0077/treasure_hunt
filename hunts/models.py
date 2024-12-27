@@ -14,11 +14,20 @@ class TreasureHuntGame(models.Model):
 
 
 class Question(models.Model):
+    QUESTION_TYPE_CHOICES = (
+        ("text", "Text"),
+        ('image', "Image"),
+        ('video', 'Video'),
+        ("document", "Document")
+    )
     game = models.ForeignKey(TreasureHuntGame, on_delete=models.CASCADE, related_name='questions')
     order = models.IntegerField()
+    title = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField()
     answer = models.CharField(max_length=255)
     hint = models.TextField(blank=True, null=True)
+    type = models.CharField(max_length=255, choices=QUESTION_TYPE_CHOICES, default="text")
+    attachment = models.FileField(upload_to='questions/attachments/', blank=True, null=True)
 
     def __str__(self):
         return f"Question {self.order} for {self.game.name}"

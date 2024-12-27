@@ -5,11 +5,15 @@ class GetUserQuestionSerializer(serializers.ModelSerializer):
     is_last_question = serializers.SerializerMethodField()
 
     class Meta:
-        model =Question
+        model = Question
         fields = (
             "pk",
+            "title",
             "description",
+            "type",
+            "attachment",
             "hint",
+            "order",
             "is_last_question",
         )
     
