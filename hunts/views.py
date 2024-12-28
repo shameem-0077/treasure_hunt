@@ -49,7 +49,7 @@ def validate_user_question(request):
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             response_data = error_response_data(errors={"answer": "Answer not correct"})
-            return Response(response_data, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
     else:
         response_data = error_response_data(errors=generate_serializer_errors(serializer._errors), description="Validation error")
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
