@@ -19,7 +19,10 @@ from .serializers import GetUserQuestionSerializer, ValidateUserQuestionAnswer
 @permission_classes((IsAuthenticated, ))
 def get_user_question(request):
     player = Player.objects.get(user=request.user)
-    current_player_progress = PlayerProgress.objects.get(player=player, question__order=player.current_question, is_completed=False)
+    try:
+        current_player_progress = PlayerProgress.objects.get(player=player, question__order=player.current_question, is_completed=False)
+    except:
+        current_player_progress = PlayerProgress.objects.filter(player=player, is_completed=True).order_by('-completed_at').first()
 
     serializer = GetUserQuestionSerializer(instance=current_player_progress.question, context={"request": request}).data
     response_data = success_response_data(data=serializer, message="User question listed")
