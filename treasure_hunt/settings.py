@@ -139,6 +139,10 @@ REST_FRAMEWORK = {
     )
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "https://ipme6pm9jh.ap-south-1.awsapprunner.com"
+]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 SIMPLE_JWT = {
