@@ -19,8 +19,8 @@ class CreateAccountSerializer(serializers.Serializer):
         email = data.get("email")
         game_id = data.get("game_id", None)
         
-        if User.objects.filter(username=email).exists():
-            raise serializers.ValidationError({"account": "Already exists"})
+        # if User.objects.filter(username=email).exists():
+        #     raise serializers.ValidationError({"account": "Already exists"})
         
         if game_id:
             game = TreasureHuntGame.objects.get(pk=game_id, is_active=True)
@@ -40,22 +40,27 @@ class CreateAccountSerializer(serializers.Serializer):
         game_id = validated_data.get("game_id", None)
 
         team_name = slugify(team_name)
-        user = User.objects.create_user(
-            first_name=team_name,
-            username=email,
-            email=email,
-            password=password
-        )
 
-        if game_id:
-            game = TreasureHuntGame.objects.get(pk=game_id, is_active=True)
+        if not User.objects.filter(username=email).exists():
+            user = User.objects.create_user(
+                first_name=team_name,
+                username=email,
+                email=email,
+                password=password
+            )
+
+            if game_id:
+                game = TreasureHuntGame.objects.get(pk=game_id, is_active=True)
+            else:
+                game = TreasureHuntGame.objects.filter(is_active=True).first()
+
+            player = Player.objects.create(
+                user=user,
+                game=game,
+            )
         else:
-            game = TreasureHuntGame.objects.filter(is_active=True).first()
-
-        player = Player.objects.create(
-            user=user,
-            game=game,
-        )
+            user = User.objects.get(username=email)
+            player = Player.objects.get(user=user)
 
         data = {
             "team_name": user.first_name,
