@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-tcma27_rmq48bw#krbsk#i4jx!_*s@b#g5-6r$b9c08#o)v3h6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shameemmuhammed.pythonanywhere.com', 'localhost', '127.0.0.1', ".awsapprunner.com"]
+ALLOWED_HOSTS = ['shameemmuhammed.pythonanywhere.com', 'localhost', '127.0.0.1', ".awsapprunner.com", "ipme6pm9jh.ap-south-1.awsapprunner.com"]
 
 
 # Application definition
