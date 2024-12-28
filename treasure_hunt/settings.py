@@ -139,12 +139,6 @@ REST_FRAMEWORK = {
     )
 }
 
-# CORS_ALLOWED_ORIGINS = [
-#     "https://ipme6pm9jh.ap-south-1.awsapprunner.com",
-#     "ipme6pm9jh.ap-south-1.awsapprunner.com",
-#     "https://treasure-hunt-self.vercel.app",
-#     "treasure-hunt-self.vercel.app",
-# ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
