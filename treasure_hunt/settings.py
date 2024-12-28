@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-tcma27_rmq48bw#krbsk#i4jx!_*s@b#g5-6r$b9c08#o)v3h6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shameemmuhammed.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['shameemmuhammed.pythonanywhere.com', 'localhost', '127.0.0.1', ".awsapprunner.com"]
 
 
 # Application definition
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -117,6 +118,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # This is the path where collectstatic w
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
